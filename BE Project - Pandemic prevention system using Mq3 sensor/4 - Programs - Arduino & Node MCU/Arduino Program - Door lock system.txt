@@ -1,0 +1,44 @@
+#ARDUINO PROGRAM
+#include <Servo.h>
+#define LEFT 7
+#define RIGHT 8
+Servo myservo;
+int angle =90; // initial angle for servo
+int angleStep =10;
+void setup() {
+ Serial.begin(9600); // setup serial
+ myservo.attach(6); // attaches the servo on pin 9 to the servo object
+ pinMode(LEFT,INPUT_PULLUP); // assign pin 12 ass input for Left button
+ pinMode(RIGHT,INPUT_PULLUP);
+ myservo.write(angle);// send servo to the middle at 90 degrees
+}
+void loop() {
+ while(digitalRead(RIGHT) == LOW){
+ if (angle > 0 && angle <= 180) {
+ angle = angle - angleStep;
+ if(angle < 0){
+ angle = 0;
+ }else{
+ myservo.write(angle); // move the servo to desired angle
+ Serial.print("Moved to: ");
+ Serial.print(angle); // print the angle
+ Serial.println(" degree");
+ }
+ }
+ delay(100); // waits for the servo to get there
+ }
+ while(digitalRead(LEFT) == LOW){
+ if (angle >= 0 && angle <= 180) {
+ angle = angle + angleStep;
+ if(angle >180){
+ angle =180;
+ }else{
+ myservo.write(angle); // move the servo to desired angle
+ Serial.print("Moved to: ");
+ Serial.print(angle); // print the angle
+ Serial.println(" degree");
+ }
+ }
+delay(100); // waits for the servo to get there
+ }
+}
